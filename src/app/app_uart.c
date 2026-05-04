@@ -1,5 +1,5 @@
 #include "app_uart.h"
-#include "bsp_uart.h"
+#include "bsp/bsp_uart.h"
 
 #include <string.h>
 

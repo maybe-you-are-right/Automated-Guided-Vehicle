@@ -1,6 +1,7 @@
 #include "filter.h"
 
 #include <assert.h>
+#include <stddef.h>
 
 void filter_ma_f32_init(filter_ma_f32_t *ctx, float *p_storage, uint32_t window_len)
 {
