@@ -8,12 +8,17 @@
 /** SCI9 实例（P109 TX / P110 RX） */
 #define UART_BSP_INST g_uart9
 
+/* 接收环形缓冲大小 */
 #define UART_RX_RING_SIZE (256U)
 
+/* 接收环形缓冲 */
 static uint8_t s_rx_ring[UART_RX_RING_SIZE];
+/* 接收环形缓冲头 */
 static volatile uint32_t s_rx_head;
+/* 接收环形缓冲尾 */
 static volatile uint32_t s_rx_tail;
 
+/* 发送忙标志 */
 static volatile uint8_t s_tx_busy;
 
 static void ring_push_byte(uint8_t b)

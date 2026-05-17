@@ -5,8 +5,8 @@
 
 /**
  * 单轮双 PWM 波输入电机驱动（H 桥类驱动板：每轮两路 PWM 占空比输入）：
- * - 左轮：一个 GPT（`g_timer3`，硬件 GPT2），GTIOCA / GTIOCB 各一路 PWM → P103 正转侧、P102 反转侧
- * - 右轮：一个 GPT（`g_timer4`，硬件 GPT4），GTIOCA / GTIOCB 各一路 PWM → P302 正转侧、P301 反转侧
+ * - 左轮：一个 GPT（`g_timer3`，硬件 GPT2），双 PWM → 正转占空在 GTIOCB（P102）、反转在 GTIOCA（P103）
+ * - 右轮：一个 GPT（`g_timer4`，硬件 GPT4），双 PWM → 正转占空在 GTIOCB（P301）、反转在 GTIOCA（P302）
  * 与 `ra_gen/hal_data`、`configuration.xml` 一致；两路 GPT 的 period_counts 须相同。
  * 速度接口：`motor_bsp_set_speed` 正占空比仅正转侧 PWM，负占空比仅反转侧 PWM。
  * 若 PCB 桥臂与 GTIOCA/B 对调，在 `bsp_motor.c` 的 `s_motor_wheel_dual_pwm` 中交换 pin_fwd / pin_rev。
@@ -31,7 +31,7 @@ void motor_bsp_set_speed(motor_id_t motor, float duty_percent);
  * 仅方向、不设百分比时：FORWARD/BACKWARD 为双 PWM 单侧 100% 占空（与 set_speed(±100) 一致）；
  * COAST 为双侧 0（滑行）；BRAKE 为双侧满占短接制动。
  */
-void motor_bsp_set_direction(motor_id_t motor, motor_dir_t dir);
+//void motor_bsp_set_direction(motor_id_t motor, motor_dir_t dir);
 void motor_bsp_stop(motor_id_t motor, motor_dir_t stop_mode);
 
 /**

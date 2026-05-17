@@ -7,7 +7,7 @@
 
 /* B 相输入（A 相由 ICU 引脚占用，不在此列） */
 #define ENCODER_LEFT_B_PIN  BSP_IO_PORT_04_PIN_09
-#define ENCODER_RIGHT_B_PIN BSP_IO_PORT_02_PIN_00
+#define ENCODER_RIGHT_B_PIN BSP_IO_PORT_05_PIN_00
 
 static volatile int32_t s_pulse_left;
 static volatile int32_t s_pulse_right;

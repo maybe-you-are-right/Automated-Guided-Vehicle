@@ -7,22 +7,22 @@
 typedef struct {
     gpt_instance_ctrl_t *p_ctrl;
     const timer_cfg_t   *p_cfg;
-    gpt_io_pin_t         pin_fwd; /**< 正转侧 PWM 引脚（GTIOCA） */
-    gpt_io_pin_t         pin_rev; /**< 反转侧 PWM 引脚（GTIOCB） */
+    gpt_io_pin_t         pin_fwd; /**< 正转侧 PWM 引脚（当前左右轮均为 GTIOCB：P102 / P301） */
+    gpt_io_pin_t         pin_rev; /**< 反转侧 PWM 引脚（当前左右轮均为 GTIOCA：P103 / P302） */
 } motor_wheel_dual_pwm_t;
 
 static const motor_wheel_dual_pwm_t s_motor_wheel_dual_pwm[MOTOR_MAX] = {
     [MOTOR_LEFT] = {
         .p_ctrl  = &g_timer3_ctrl,
         .p_cfg   = &g_timer3_cfg,
-        .pin_fwd = GPT_IO_PIN_GTIOCA,
-        .pin_rev = GPT_IO_PIN_GTIOCB,
+        .pin_fwd = GPT_IO_PIN_GTIOCB,
+        .pin_rev = GPT_IO_PIN_GTIOCA,
     },
     [MOTOR_RIGHT] = {
         .p_ctrl  = &g_timer4_ctrl,
         .p_cfg   = &g_timer4_cfg,
-        .pin_fwd = GPT_IO_PIN_GTIOCA,
-        .pin_rev = GPT_IO_PIN_GTIOCB,
+        .pin_fwd = GPT_IO_PIN_GTIOCB,
+        .pin_rev = GPT_IO_PIN_GTIOCA,
     },
 };
 
@@ -97,34 +97,36 @@ void motor_bsp_set_dual_pwm(motor_id_t motor, float duty_forward_percent, float 
     motor_wheel_dual_pwm_counts_set(hw, fwd, rev);
 }
 
-void motor_bsp_set_direction(motor_id_t motor, motor_dir_t dir)
-{
-    const motor_wheel_dual_pwm_t *hw = motor_wheel_hw_get(motor);
-    const uint32_t                 period = motor_pwm_period_counts();
+// void motor_bsp_set_direction(motor_id_t motor, motor_dir_t dir)
+// {
+//     const motor_wheel_dual_pwm_t *hw = motor_wheel_hw_get(motor);
+//     const uint32_t                 period = motor_pwm_period_counts();
 
-    switch (dir) {
-        case MOTOR_DIR_FORWARD:
-            motor_wheel_dual_pwm_counts_set(hw, period, 0U);
-            break;
-        case MOTOR_DIR_BACKWARD:
-            motor_wheel_dual_pwm_counts_set(hw, 0U, period);
-            break;
-        case MOTOR_DIR_BRAKE:
-            motor_wheel_dual_pwm_brake(hw);
-            break;
-        case MOTOR_DIR_COAST:
-        default:
-            motor_wheel_dual_pwm_idle(hw);
-            break;
-    }
-}
+//     switch (dir) {
+//         case MOTOR_DIR_FORWARD:
+//             motor_wheel_dual_pwm_counts_set(hw, period, 0U);
+//             break;
+//         case MOTOR_DIR_BACKWARD:
+//             motor_wheel_dual_pwm_counts_set(hw, 0U, period);
+//             break;
+//         case MOTOR_DIR_BRAKE:
+//             motor_wheel_dual_pwm_brake(hw);
+//             break;
+//         case MOTOR_DIR_COAST:
+//         default:
+//             motor_wheel_dual_pwm_idle(hw);
+//             break;
+//     }
+// }
 
 void motor_bsp_set_speed(motor_id_t motor, float duty_percent)
 {
     if (duty_percent >= 0.0f) {
-        motor_bsp_set_dual_pwm(motor, duty_percent, 0.0f);
+        motor_bsp_set_dual_pwm(motor,100.0f, 100.0-duty_percent);
+
     } else {
-        motor_bsp_set_dual_pwm(motor, 0.0f, -duty_percent);
+        motor_bsp_set_dual_pwm(motor, 100.0f+duty_percent, 100.0f);
+
     }
 }
 

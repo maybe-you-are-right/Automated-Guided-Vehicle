@@ -30,9 +30,9 @@ static float               s_last_meas_filt_r = 0.0f;
 //可能需要辨别正负号
 /* 传感器几何位置权重（通道 1…8 对应下标 0…7），与物理左→右一致 */
 static const float s_weights[TRACK_SENSOR_NUM] = {
-    -3.5f, -2.5f, -1.5f, -0.5f, 0.5f, 1.5f, 2.5f, 3.5f,
+    -3.5f, -2.5f, -1.5f, -1.0f, 1.0f, 1.5f, 2.5f, 3.5f,
 };
-//
+
 static float clampf(float x, float lo, float hi)
 {
     if (x < lo) {
@@ -141,7 +141,7 @@ void app_motor_init(void)
              -APP_MOTOR_CORRECTION_LIMIT_DEFAULT,
              APP_MOTOR_CORRECTION_LIMIT_DEFAULT);
 
-    motor_speed_pid_pair_init_defaults();
+    //motor_speed_pid_pair_init_defaults();
 
     s_sensor_invert   = 0U;
     s_last_norm_error = 0.0f;
@@ -227,41 +227,43 @@ void app_motor_line_follow_update(float base_speed_percent, float dt_sec)
     left  = clampf(left, -100.0f, 100.0f);
     right = clampf(right, -100.0f, 100.0f);
 
-    /* 速度内环：测量速度经 LPF 后与目标比较（原始速度仍可从 bsp / raw_get 读取） */
-    {
-        const float v_raw_l = encoder_bsp_velocity_m_s_get(ENCODER_SIDE_LEFT);
-        const float v_raw_r = encoder_bsp_velocity_m_s_get(ENCODER_SIDE_RIGHT);
 
-        if ((0U == s_meas_lpf_inited) && (dt_sec > 1.0e-9f)) {
-            filter_lpf_1st_f32_init_tau(&s_meas_lpf_left,
-                                        dt_sec,
-                                        APP_MOTOR_SPEED_MEAS_LPF_TAU_SEC,
-                                        0.0f);
-            filter_lpf_1st_f32_init_tau(&s_meas_lpf_right,
-                                        dt_sec,
-                                        APP_MOTOR_SPEED_MEAS_LPF_TAU_SEC,
-                                        0.0f);
-            s_meas_lpf_inited = 1U;
-        }
+//    /* 速度内环：测量速度经 LPF 后与目标比较（原始速度仍可从 bsp / raw_get 读取） */
+//   {
+//       const float v_raw_l = encoder_bsp_velocity_m_s_get(ENCODER_SIDE_LEFT);
+//         const float v_raw_r = encoder_bsp_velocity_m_s_get(ENCODER_SIDE_RIGHT);
 
-        const float v_meas_l = (0U != s_meas_lpf_inited) ? filter_lpf_1st_f32_run(&s_meas_lpf_left, v_raw_l) : v_raw_l;
-        const float v_meas_r = (0U != s_meas_lpf_inited) ? filter_lpf_1st_f32_run(&s_meas_lpf_right, v_raw_r) : v_raw_r;
+//         if ((0U == s_meas_lpf_inited) && (dt_sec > 1.0e-9f)) {
+//             filter_lpf_1st_f32_init_tau(&s_meas_lpf_left,
+//                                         dt_sec,
+//                                         APP_MOTOR_SPEED_MEAS_LPF_TAU_SEC,
+//                                         0.0f);
+//             filter_lpf_1st_f32_init_tau(&s_meas_lpf_right,
+//                                         dt_sec,
+//                                         APP_MOTOR_SPEED_MEAS_LPF_TAU_SEC,
+//                                         0.0f);
+//             s_meas_lpf_inited = 1U;
+//         }
 
-        s_last_meas_filt_l = v_meas_l;
-        s_last_meas_filt_r = v_meas_r;
+//         const float v_meas_l = (0U != s_meas_lpf_inited) ? filter_lpf_1st_f32_run(&s_meas_lpf_left, v_raw_l) : v_raw_l;
+//         const float v_meas_r = (0U != s_meas_lpf_inited) ? filter_lpf_1st_f32_run(&s_meas_lpf_right, v_raw_r) : v_raw_r;
 
-        const float v_tgt_l = app_motor_duty_to_target_vel_m_s(left);
-        const float v_tgt_r = app_motor_duty_to_target_vel_m_s(right);
+//         s_last_meas_filt_l = v_meas_l;
+//         s_last_meas_filt_r = v_meas_r;
 
-        s_last_speed_err_left  = v_tgt_l - v_meas_l;
-        s_last_speed_err_right = v_tgt_r - v_meas_r;
+//         const float v_tgt_l = app_motor_duty_to_target_vel_m_s(left);
+//         const float v_tgt_r = app_motor_duty_to_target_vel_m_s(right);
 
-        const float u_l = pid_compute(&s_speed_pid_left, s_last_speed_err_left, dt_sec);
-        const float u_r = pid_compute(&s_speed_pid_right, s_last_speed_err_right, dt_sec);
+//         s_last_speed_err_left  = v_tgt_l - v_meas_l;
+//         s_last_speed_err_right = v_tgt_r - v_meas_r;
 
-        left  = clampf(left + u_l, -100.0f, 100.0f);
-        right = clampf(right + u_r, -100.0f, 100.0f);
-    }
+//         const float u_l = pid_compute(&s_speed_pid_left, s_last_speed_err_left, dt_sec);
+//         const float u_r = pid_compute(&s_speed_pid_right, s_last_speed_err_right, dt_sec);
+
+//         left  = clampf(left + u_l, -100.0f, 100.0f);
+//         right = clampf(right + u_r, -100.0f, 100.0f);
+//     }
+
 
     motor_bsp_set_speed(MOTOR_LEFT, left);
     motor_bsp_set_speed(MOTOR_RIGHT, right);

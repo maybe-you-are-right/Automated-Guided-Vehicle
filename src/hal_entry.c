@@ -22,8 +22,12 @@ void hal_entry(void) {
     app_motor_init();
     app_motor_set_sensor_invert(0U);
 
+#if (0U != HAL_TRACK_DEBUG_UART)
+    car_uart_track_debug_boot_msg();
+#endif
+
 #ifndef HAL_LINE_FOLLOW_BASE_SPEED
-#define HAL_LINE_FOLLOW_BASE_SPEED (38.0f)
+#define HAL_LINE_FOLLOW_BASE_SPEED (15.0f)
 #endif
 #ifndef HAL_LINE_FOLLOW_PERIOD_MS
 #define HAL_LINE_FOLLOW_PERIOD_MS (10U)
@@ -36,6 +40,9 @@ void hal_entry(void) {
         {
             /* 字节由 UART RXI 中断入环缓，此处仅解析命令并更新 g_car_stop_request */
             car_uart_command_poll();
+#if (0U != HAL_TRACK_DEBUG_UART)
+            car_uart_track_periodic_poll((uint32_t)HAL_LINE_FOLLOW_PERIOD_MS);
+#endif
 
             if (0U != car_uart_halted_get()) {
                 /* STOP：边沿触发一次刹车，避免每周期重复 app_motor_stop 清 PID */
@@ -54,7 +61,8 @@ void hal_entry(void) {
             }
             was_halted = 0U;
 
-            encoder_bsp_velocity_sample(dt_sec);
+            //encoder_bsp_velocity_sample(dt_sec);
+            //禁用内环后不需要编码器测量速度，减少CPU负担。
             app_motor_line_follow_update(HAL_LINE_FOLLOW_BASE_SPEED, dt_sec);
             R_BSP_SoftwareDelay(HAL_LINE_FOLLOW_PERIOD_MS, BSP_DELAY_UNITS_MILLISECONDS);
         }

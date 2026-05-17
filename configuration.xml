@@ -465,9 +465,6 @@
       <configSetting altId="p109.gpio_mode.gpio_mode_peripheral" configurationId="p109.gpio_mode"/>
       <configSetting altId="p110.sci9.rxd" configurationId="p110"/>
       <configSetting altId="p110.gpio_mode.gpio_mode_peripheral" configurationId="p110.gpio_mode"/>
-      <configSetting altId="p200.input" configurationId="p200"/>
-      <configSetting altId="p200.gpio_mode.gpio_mode_in" configurationId="p200.gpio_mode"/>
-      <configSetting altId="p200.gpio_pupd.gpio_pupd_ip_up" configurationId="p200.gpio_pupd"/>
       <configSetting altId="p300.debug0.swclk" configurationId="p300"/>
       <configSetting altId="p300.gpio_mode.gpio_mode_peripheral" configurationId="p300.gpio_mode"/>
       <configSetting altId="p301.gpt4.gtiocb" configurationId="p301"/>
@@ -480,6 +477,9 @@
       <configSetting altId="p409.input" configurationId="p409"/>
       <configSetting altId="p409.gpio_mode.gpio_mode_in" configurationId="p409.gpio_mode"/>
       <configSetting altId="p409.gpio_pupd.gpio_pupd_ip_up" configurationId="p409.gpio_pupd"/>
+      <configSetting altId="p500.input" configurationId="p500"/>
+      <configSetting altId="p500.gpio_mode.gpio_mode_in" configurationId="p500.gpio_mode"/>
+      <configSetting altId="p500.gpio_pupd.gpio_pupd_ip_up" configurationId="p500.gpio_pupd"/>
       <configSetting altId="sci9.mode.asynchronous.free" configurationId="sci9.mode"/>
       <configSetting altId="sci9.rxd.p110" configurationId="sci9.rxd"/>
       <configSetting altId="sci9.txd.p109" configurationId="sci9.txd"/>

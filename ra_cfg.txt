@@ -128,7 +128,7 @@ FSP Configuration
       P110 27 SCI9_RXD9 - Low None "Peripheral mode" CMOS None "AGT3: AGTEE3; DEBUG0: TDI; GPT_OPS0: GTOVLO; GPT1: GTIOC1B; ICU0: IRQ03; SCI2: CTSRTS2; SCI9: RXD9; SCI9: SCL9; SPI0: MISOA" - IO - - 
       P111 28 - - - - Disabled - - "AGT5: AGTOA5; GPT3: GTIOC3A; ICU0: IRQ04; SCI2: SCK2; SCI9: SCK9; SPI0: RSPCKA" - None - - 
       P112 29 - - - - Disabled - - "AGT5: AGTOB5; GPT3: GTIOC3B; QSPI0: QSSL; SCI1: SCK1; SCI2: SDA2; SCI2: TXD2; SPI0: SSLA0; SSI0: SSIBCK0" - None - - 
-      P200 21 GPIO - - None "Input mode" - "input pull-up" "ICU0: NMI" - IO - - 
+      P200 21 - - - - Disabled - - "ICU0: NMI" - None - - 
       P201 20 - - - - Disabled - - "SYSTEM0: MD" - None - - 
       P206 18 - - - - Disabled - - "CTSU0: TS02; GPT_OPS0: GTIU; ICU0: IRQ00; IIC1: SDA1; SCI4: RXD4; SCI4: SCL4; SCI9: CTS9; SDHI0: SD0DAT2; SPI0: SSLA1; SSI0: SSIDATA0; USB_FS0: USB_VBUSEN" - None - - 
       P207 17 - - - - Disabled - - "CTSU0: TSCAP; QSPI0: QSSL; SCI4: SDA4; SCI4: TXD4; SPI0: SSLA2" - None - - 
@@ -141,7 +141,7 @@ FSP Configuration
       P407 12 - - - - Disabled - - "ADC0: ADTRG0; AGT0: AGTIO0; CTSU0: TS03; GPT6: GTIOC6A; IIC0: SDA0; RTC0: RTCOUT; SCI4: CTSRTS4; SPI0: SSLA3; USB_FS0: USB_VBUS" - None - - 
       P408 11 - - - - Disabled - - "AGT2: AGTOB2; CTSU0: TS04; GPT_OPS0: GTOWLO; GPT6: GTIOC6B; ICU0: IRQ07; IIC0: SCL0; SCI3: RXD3; SCI3: SCL3; SCI4: CTS4; USB_FS0: USB_ID" - None - - 
       P409 10 GPIO - - None "Input mode" - "input pull-up" "AGT2: AGTOA2; CTSU0: TS05; GPT_OPS0: GTOWUP; ICU0: IRQ06; SCI3: SDA3; SCI3: TXD3; USB_FS0: USB_EXICEN" - IO - - 
-      P500 37 - - - - Disabled - - "ADC0: AN016; AGT0: AGTOA0; CAC0: CACREF; GPT_OPS0: GTIU; QSPI0: QSPCLK; USB_FS0: USB_VBUSEN" - None - - 
+      P500 37 GPIO - - - "Input mode" - "input pull-up" "ADC0: AN016; AGT0: AGTOA0; CAC0: CACREF; GPT_OPS0: GTIU; QSPI0: QSPCLK; USB_FS0: USB_VBUSEN" - IO - - 
       RES 19 SYSTEM0_RES - - - - - - - - IO "Read only" - 
       USBDM 14 USB_FS0_USB_DM - - - - - - - - IO "Read only" - 
       USBDP 15 USB_FS0_USB_DP - - - - - - - - IO "Read only" - 
