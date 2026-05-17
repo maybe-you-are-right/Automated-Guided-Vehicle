@@ -5,7 +5,7 @@
 
 /** 1=周期打印 8 路灰度（与 STM32 track_test 同款）；0=关闭 */
 #ifndef HAL_TRACK_DEBUG_UART
-#define HAL_TRACK_DEBUG_UART (1U)
+#define HAL_TRACK_DEBUG_UART (0U)
 #endif
 
 /** 灰度周期上报间隔 (ms)，与 STM32 TRACK_REPORT_INTERVAL_MS 同类 */
