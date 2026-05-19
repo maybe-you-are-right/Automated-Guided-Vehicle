@@ -55,12 +55,13 @@ Important outputs:
   - discrete PID algorithm
   - output limiting and integral clamping
 - `src/bsp/bsp_motor.c` / `bsp_motor.h`
-  - motor PWM and direction control
-  - left wheel: P212 PWM, P213/P407 direction
-  - right wheel: P110 PWM, P112/P408 direction
+  - dual PWM per wheel (GPT2/GPT4): left P102/P103, right P301/P302
+  - `motor_bsp_set_speed` uses complementary dual-PWM (100%, 100−|duty|)
 - `src/bsp/bsp_track.c` / `bsp_track.h`
-  - 8-channel infrared line sensor
-  - weighted centroid position calculation
+  - 8-channel mux: AD0/AD1/AD2 → P002/P001/P000, OUT → P013
+  - 500 µs settle after address change; black line → OUT high → 1
+- `src/app/app_uart.c` / `app_uart.h`
+  - STOP/RUN commands; `HAL_TRACK_DEBUG_UART` (default 0) for periodic gray-scale print
 
 ## 5. Project conventions
 

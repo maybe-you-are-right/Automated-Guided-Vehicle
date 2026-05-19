@@ -69,13 +69,11 @@ Generated outputs:
 ### 4.3 BSP layer (hardware abstraction)
 
 - `src/bsp/bsp_motor.c`
-  - dual PWM per wheel (GPT2/GPT4, GTIOCA/GTIOCB pairs)
-  - left motor: P103/P102 (GPT2), right motor: P302/P301 (GPT4)
-  - direction control pins for each motor
+  - dual complementary PWM per wheel (GPT2/GPT4)
+  - left: P102 (GTIOCB fwd) / P103 (GTIOCA rev); right: P301 / P302
 - `src/bsp/bsp_track.c`
-  - 8-channel multiplexed infrared line sensor
-  - address lines: P000-P002, data input: P013
-  - channel switching with configurable delay
+  - 8-channel mux: AD0/AD1/AD2 → P002/P001/P000, OUT → P013
+  - `TRACK_MUX_DELAY_US` default 500 µs; black line → OUT high → 1
 - `src/bsp/bsp_encoder.c`
   - incremental encoder interface with A/B phase detection
   - left encoder: A=P402 (IRQ), B=P409 (GPIO)
@@ -102,16 +100,17 @@ Generated outputs:
 - Use `HAL_LINE_FOLLOW_BASE_SPEED` and `HAL_LINE_FOLLOW_PERIOD_MS` to adjust behavior
 - Use `app_motor_set_differential_manual()` for hardware validation
 - For UART communication, use `bsp_uart` layer functions; initialize with `uart_bsp_init()`
-- For encoder feedback: call `encoder_bsp_velocity_sample(dt_sec)` each control period before `app_motor_line_follow_update()`
+- Speed inner loop is optional (default off in `hal_entry` / `APP_MOTOR.c`); when enabled, call `encoder_bsp_velocity_sample(dt_sec)` before `app_motor_line_follow_update()`
+- UART gray-scale debug: `HAL_TRACK_DEBUG_UART` in `app_uart.h` (default 0)
 - Use filter module (`src/algorithm/filter.h`) for signal smoothing; encoder velocity uses 1st-order low-pass IIR
 - Prefer small, local changes over broad refactors in firmware code
 
 ## 7. Hardware configuration
 
 Key pin mappings (see `docs/引脚配置说明.md` for details):
-- **Motor control**: Left PWM (P103/P102 on GPT2), Right PWM (P302/P301 on GPT4), direction pins per motor
+- **Motor control**: Left dual PWM P102/P103 (GPT2), Right P301/P302 (GPT4)
 - **Encoders**: Left encoder A=P402 (IRQ), B=P409; Right encoder A=P104 (IRQ), B=P200
-- **Line sensor**: Address lines (P000-P002), sensor output (P013)
+- **Line sensor**: AD0/AD1/AD2 → P002/P001/P000, OUT → P013
 - **UART**: SCI9 TXD (P109), RXD (P110) for debug/communication
 - **Debug**: SWCLK (P300), SWDIO (P108)
 
